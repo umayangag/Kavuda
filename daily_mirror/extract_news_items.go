@@ -13,13 +13,13 @@ func (d DailyMirrorDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	//get the page
 	resp, err := request_handlers.GetRequest(newsSiteUrl)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	//convert html string to doc for element selection
 	doc, err := utils2.HTMLStringToDoc(resp)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	newsNodes := doc.Find(".col-md-8")

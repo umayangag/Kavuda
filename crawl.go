@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"kavuda/daily_mirror"
+	"kavuda/daily_news"
 	"kavuda/models"
 	"kavuda/utils"
 )
 
 func main() {
-	crawl(daily_mirror.DailyMirrorDecoder{})
+	//crawl(daily_mirror.DailyMirrorDecoder{})
 	//crawl(ceylon_today.CeylonTodayDecoder{})
-	//crawl(daily_news.DailyNewsDecoder{})
+	crawl(daily_news.DailyNewsDecoder{})
 }
 
 func crawl(decoder models.IDecoder) {

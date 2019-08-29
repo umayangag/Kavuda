@@ -4,7 +4,9 @@ import (
 	"kavuda/models"
 )
 
-var newsSiteUrl = "http://www.dailynews.lk/"
+var newsSiteUrl1 = "http://www.dailynews.lk/category/local"
+var newsSiteUrl2 = "http://www.dailynews.lk/category/political"
+var newsSiteUrl3 = "http://www.dailynews.lk/category/business"
 
 type DailyNewsDecoder struct {
 	models.IDecoder

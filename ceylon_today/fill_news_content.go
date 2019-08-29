@@ -11,12 +11,12 @@ import (
 func (d CeylonTodayDecoder) FillNewsContent(newsItem models.NewsItem) (models.NewsItem, string, error) {
 	singleNewsResult, err := request_handlers.GetRequest(newsItem.Link)
 	if err != nil {
-		panic(err)
+		return models.NewsItem{},"",err
 	}
 
 	var singleNewsResponse models2.SingleNewsResponse
 	if err = json.Unmarshal([]byte(singleNewsResult), &singleNewsResponse); err != nil {
-		panic(err)
+		return models.NewsItem{},"",err
 	}
 
 	newsContent := singleNewsResponse.Data[0]

@@ -12,18 +12,18 @@ func (d CeylonTodayDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	//get the page
 	resp, err := request_handlers.GetRequest(newsSiteUrl)
 	if err != nil {
-		panic(err)
+		return nil,err
 	}
 	var (
 		newsItemsResponse models2.NewsItemsResponse
 		newsItems         []models.NewsItem
 	)
 	if err := json.Unmarshal([]byte(resp), &newsItemsResponse); err != nil {
-		panic(err)
+		return nil,err
 	}
 
 	if newsItemsResponse.SuccessMessage != "OK" {
-		panic(errors.New("request success message not received"))
+		return nil,errors.New("request success message not received")
 	}
 
 	//create news item list from news item responses
