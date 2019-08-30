@@ -1,4 +1,4 @@
-package daily_mirror
+package the_nation
 
 import (
 	"GIG/commons"
@@ -9,14 +9,12 @@ import (
 	"kavuda/utils"
 )
 
-
-func (d DailyMirrorDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
+func (d TheNationDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	//get the page
 	resp, err := request_handlers.GetRequest(newsSiteUrl)
 	if err != nil {
 		return nil, err
 	}
-
 	//convert html string to doc for element selection
 	doc, err := utils2.HTMLStringToDoc(resp)
 	if err != nil {
@@ -25,24 +23,25 @@ func (d DailyMirrorDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 
 	var newsLinks []string
 
-	newsNodes := doc.Find(".col-md-8")
+	newsNodes := doc.Find(".rss_item")
 	var newsItems []models.NewsItem
 	for _, node := range newsNodes.Nodes {
 		nodeDoc := goquery.NewDocumentFromNode(node)
 
-		url,_ := nodeDoc.Find("a").First().Attr("href")
+		url, _ := nodeDoc.Find("a").First().Attr("href")
+
 		if !commons.StringInSlice(newsLinks, url) { // if the link is not already enlisted before
 			newsLinks = append(newsLinks, url)
 
-			dateString := nodeDoc.Find(".gtime").First().Nodes[0].FirstChild.Data
-			title := nodeDoc.Find(".cat-hd-tx").First().Nodes[0].FirstChild.Data
-			snippet := nodeDoc.Find("p").Last().Nodes[0].FirstChild.Data
+			dateString := nodeDoc.Find("small").First().Nodes[0].FirstChild.Data
+			snippet := nodeDoc.Find("p").First().Nodes[0].FirstChild.Data
+			title, _ := nodeDoc.Find("a").First().Attr("title")
 
 			newsItems = append(newsItems, models.NewsItem{
 				Title:   title,
-				Snippet: snippet,
 				Link:    url,
-				Date:    utils.ExtractPublishedDate("02 Jan 2006 ", dateString),
+				Date:    utils.ExtractPublishedDate("on January 02, 2006 at 3:04 pm", dateString),
+				Snippet: snippet,
 			})
 		}
 	}

@@ -27,9 +27,9 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	var newsItems []models.NewsItem
 	for _, node := range newsNodes.Nodes {
 		nodeDoc := goquery.NewDocumentFromNode(node)
-		newsDate, _ := nodeDoc.Find(".article_date").First().Html()
+		dateString, _ := nodeDoc.Find(".article_date").First().Html()
 
-		if newsDate != "" {
+		if dateString != "" {
 			extractedUrl, _ := nodeDoc.Find("a").First().Attr("href")
 			if extractedUrl != "/" {
 				title := nodeDoc.Find("a").First().Nodes[0].FirstChild.Data
@@ -41,7 +41,7 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 					newsItems = append(newsItems, models.NewsItem{
 						Title: title,
 						Link:  url,
-						Date:  utils.ExtractPublishedDate("January 02, 2006, 3:04 pm", newsDate),
+						Date:  utils.ExtractPublishedDate("January 02, 2006, 3:04 pm", dateString),
 					})
 				}
 			}
