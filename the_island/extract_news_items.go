@@ -21,6 +21,8 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 		return nil, err
 	}
 
+	var newsLinks []string
+
 	newsNodes := doc.Find(".col")
 	var newsItems []models.NewsItem
 	for _, node := range newsNodes.Nodes {
@@ -29,15 +31,19 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 
 		if newsDate != "" {
 			extractedUrl, _ := nodeDoc.Find("a").First().Attr("href")
-			if extractedUrl!="/" {
+			if extractedUrl != "/" {
 				title := nodeDoc.Find("a").First().Nodes[0].FirstChild.Data
 				url := commons.FixUrl(extractedUrl, newsSiteUrl)
 
-				newsItems = append(newsItems, models.NewsItem{
-					Title: title,
-					Link:  url,
-					Date:  utils.ExtractPublishedDate("January 02, 2006, 3:04 pm", newsDate),
-				})
+				if !commons.StringInSlice(newsLinks, url) { // if the link is not already enlisted before
+					newsLinks = append(newsLinks, url)
+
+					newsItems = append(newsItems, models.NewsItem{
+						Title: title,
+						Link:  url,
+						Date:  utils.ExtractPublishedDate("January 02, 2006, 3:04 pm", newsDate),
+					})
+				}
 			}
 		}
 	}

@@ -43,6 +43,8 @@ func extractNewItems(siteUrl string) ([]models.NewsItem, error) {
 		return nil, err
 	}
 
+	var newsLinks []string
+
 	newsNodes := doc.Find(".field-content")
 	var newsItems []models.NewsItem
 	for _, node := range newsNodes.Nodes {
@@ -53,14 +55,19 @@ func extractNewItems(siteUrl string) ([]models.NewsItem, error) {
 			title := nodeDoc.Find("a").First().Nodes[0].FirstChild.Data
 			if title != "img" { //is valid news link
 				url := commons.FixUrl(extractedUrl, siteUrl)
-				extractDate := strings.Split(url, "/")
-				dateString := extractDate[0] + " " + extractDate[1] + " " + extractDate[2]
 
-				newsItems = append(newsItems, models.NewsItem{
-					Title: title,
-					Link:  url,
-					Date:  utils.ExtractPublishedDate("2006 01 02", dateString),
-				})
+				if !commons.StringInSlice(newsLinks, url) { // if the link is not already enlisted before
+					newsLinks = append(newsLinks, url)
+
+					extractDate := strings.Split(url, "/")
+					dateString := extractDate[0] + " " + extractDate[1] + " " + extractDate[2]
+
+					newsItems = append(newsItems, models.NewsItem{
+						Title: title,
+						Link:  url,
+						Date:  utils.ExtractPublishedDate("2006 01 02", dateString),
+					})
+				}
 			}
 		}
 	}
