@@ -16,7 +16,7 @@ type IDecoder interface {
 	GetSourceTitle() string
 }
 
-func FillNewsContent(newsItem NewsItem, contentClass string) (NewsItem, string, error) {
+func FillNewsContent(newsItem NewsItem, contentClass string, htmlCleaner clean_html.HtmlCleaner) (NewsItem, string, error) {
 	resp, err := request_handlers.GetRequest(newsItem.Link)
 	if err != nil {
 		return newsItem, "", err
@@ -40,7 +40,7 @@ func FillNewsContent(newsItem NewsItem, contentClass string) (NewsItem, string, 
 
 	//clean html code by removing unwanted information
 	var imageList []models.Upload
-	newsItem.Content, _, imageList = clean_html.CleanHTML(newsItem.Link, news)
+	newsItem.Content, _, imageList = htmlCleaner.CleanHTML(newsItem.Link, news)
 
 	for _, image := range imageList {
 		go func(payload models.Upload) {
