@@ -7,38 +7,36 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"kavuda/models"
 	"kavuda/utils"
-	"strings"
 )
 
 func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	//get the page
 	resp, err := request_handlers.GetRequest(newsSiteUrl)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	//convert html string to doc for element selection
 	doc, err := utils2.HTMLStringToDoc(resp)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	newsNodes := doc.Find(".left_news_cat")
+	newsNodes := doc.Find(".col")
 	var newsItems []models.NewsItem
 	for _, node := range newsNodes.Nodes {
 		nodeDoc := goquery.NewDocumentFromNode(node)
-		extractedUrl, exist := nodeDoc.Find("a").First().Attr("href")
+		newsDate, _ := nodeDoc.Find(".article_date").First().Html()
 
-		if exist { // if url found
-			title := nodeDoc.Find("a").First().Nodes[0].FirstChild.Data
-			if title != "img" { //is valid news link
+		if newsDate != "" {
+			extractedUrl, _ := nodeDoc.Find("a").First().Attr("href")
+			if extractedUrl!="/" {
+				title := nodeDoc.Find("a").First().Nodes[0].FirstChild.Data
 				url := commons.FixUrl(extractedUrl, newsSiteUrl)
-				extractDate := strings.Split(url, "/")
-				dateString := extractDate[0] + " " + extractDate[1] + " " + extractDate[2]
 
 				newsItems = append(newsItems, models.NewsItem{
 					Title: title,
 					Link:  url,
-					Date:    utils.ExtractPublishedDate("2006 01 02", dateString),
+					Date:  utils.ExtractPublishedDate("January 02, 2006, 3:04 pm", newsDate),
 				})
 			}
 		}

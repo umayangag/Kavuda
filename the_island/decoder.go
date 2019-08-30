@@ -11,5 +11,5 @@ type TheIslandDecoder struct {
 }
 
 func (d TheIslandDecoder) GetSourceTitle() string {
-	return "Island"
+	return "The Island"
 }
