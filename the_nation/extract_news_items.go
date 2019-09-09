@@ -7,6 +7,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"kavuda/models"
 	"kavuda/utils"
+	"strings"
 )
 
 func (d TheNationDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
@@ -29,18 +30,17 @@ func (d TheNationDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 		nodeDoc := goquery.NewDocumentFromNode(node)
 
 		url, _ := nodeDoc.Find("a").First().Attr("href")
-
-		if !commons.StringInSlice(newsLinks, url) { // if the link is not already enlisted before
+		if !commons.StringInSlice(newsLinks, url) && commons.ExtractDomain(url) == "www.adaderana.lk" { // if the link is not already enlisted before
 			newsLinks = append(newsLinks, url)
 
-			dateString := nodeDoc.Find("small").First().Nodes[0].FirstChild.Data
+			dateString := strings.TrimSpace(nodeDoc.Find("small").First().Nodes[0].LastChild.Data)
 			snippet := nodeDoc.Find("p").First().Nodes[0].FirstChild.Data
-			title, _ := nodeDoc.Find("a").First().Attr("title")
+			title := nodeDoc.Find(".title").First().Text()
 
 			newsItems = append(newsItems, models.NewsItem{
 				Title:   title,
 				Link:    url,
-				Date:    utils.ExtractPublishedDate("on January 02, 2006 at 3:04 pm", dateString),
+				Date:    utils.ExtractPublishedDate("on January 2, 2006 at 3:04 pm", dateString),
 				Snippet: snippet,
 			})
 		}

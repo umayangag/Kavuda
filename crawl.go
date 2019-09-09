@@ -9,10 +9,10 @@ import (
 
 func main() {
 	//crawl(daily_mirror.DailyMirrorDecoder{})
-	//crawl(ceylon_today.CeylonTodayDecoder{})
 	//crawl(daily_news.DailyNewsDecoder{})
 	//crawl(the_island.TheIslandDecoder{})
 	crawl(the_nation.TheNationDecoder{})
+	//crawl(ceylon_today.CeylonTodayDecoder{})
 }
 
 func crawl(decoder models.IDecoder) {
@@ -28,6 +28,7 @@ func crawl(decoder models.IDecoder) {
 	fmt.Println("Reading News...")
 	for _, newsItem := range newsItems {
 
+		fmt.Println("	Item: ", newsItem.Title)
 		fmt.Println("	News: ", newsItem.Link)
 		newsItem, contentString, err := decoder.FillNewsContent(newsItem)
 		if err != nil {
