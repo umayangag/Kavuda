@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
+	"kavuda/daily_news"
 	"kavuda/models"
-	"kavuda/the_nation"
 	"kavuda/utils"
 )
 
 func main() {
 	//crawl(daily_mirror.DailyMirrorDecoder{})
-	//crawl(daily_news.DailyNewsDecoder{})
+	crawl(daily_news.DailyNewsDecoder{})
 	//crawl(the_island.TheIslandDecoder{})
-	crawl(the_nation.TheNationDecoder{})
+	//crawl(the_nation.TheNationDecoder{})
 	//crawl(ceylon_today.CeylonTodayDecoder{})
 }
 

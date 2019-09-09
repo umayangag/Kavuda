@@ -56,12 +56,11 @@ func extractNewItems(siteUrl string) ([]models.NewsItem, error) {
 			if title != "img" { //is valid news link
 				url := commons.FixUrl(extractedUrl, siteUrl)
 
-				if !commons.StringInSlice(newsLinks, url) { // if the link is not already enlisted before
+				if !commons.StringInSlice(newsLinks, url) && !strings.Contains(url,"#comment"){ // if the link is not already enlisted before
 					newsLinks = append(newsLinks, url)
 
-					extractDate := strings.Split(url, "/")
-					dateString := extractDate[0] + " " + extractDate[1] + " " + extractDate[2]
-
+					extractDate := strings.Split(extractedUrl, "/")
+					dateString := extractDate[1] + " " + extractDate[2] + " " + extractDate[3]
 					newsItems = append(newsItems, models.NewsItem{
 						Title: title,
 						Link:  url,
