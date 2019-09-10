@@ -19,9 +19,10 @@ func ProcessAndSaveEntity(entity models.Entity, textContent string){
 	var entities []models.Entity
 
 	for _, entityObject := range entityTitles {
-		//normalizedName, err := utils.NormalizeName(entityObject.EntityName)
+		// uncomment the following line to enable normalizing entity names
+		normalizedName, err := utils.NormalizeName(entityObject.EntityName)
 		if err == nil {
-			entities = append(entities, models.Entity{Title: entityObject.EntityName}.AddCategory(entityObject.Category))
+			entities = append(entities, models.Entity{Title: normalizedName}.AddCategory(entityObject.Category))
 		}
 	}
 
