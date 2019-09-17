@@ -4,7 +4,7 @@ import (
 	"kavuda/models"
 )
 
-var newsSiteUrl = "http://www.island.lk/index.php?page_cat=news-section&page=news-section&code_title=48"
+var newsSiteUrl = "http://www.island.lk/index.php?page_cat=news-section&page=news-section&code_title=39"
 
 type TheIslandDecoder struct {
 	models.IDecoder

@@ -7,12 +7,13 @@ import (
 	"fmt"
 )
 
-func ProcessAndSaveEntity(entity models.Entity, textContent string){
+func ProcessAndSaveEntity(entity models.Entity, textContent string) {
 	//NER extraction
 	fmt.Println("		Running NER on the text content...")
 	entityTitles, err := utils.ExtractEntityNames(textContent)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err,entity.Title)
+		fmt.Println(entityTitles)
 	}
 	fmt.Println("		NER completed successfully.")
 
@@ -20,7 +21,8 @@ func ProcessAndSaveEntity(entity models.Entity, textContent string){
 
 	for _, entityObject := range entityTitles {
 		// uncomment the following line to enable normalizing entity names
-		normalizedName, err := utils.NormalizeName(entityObject.EntityName)
+		// normalizedName, err := utils.NormalizeName(entityObject.EntityName)
+		normalizedName := entityObject.EntityName
 		if err == nil {
 			entities = append(entities, models.Entity{Title: normalizedName}.AddCategory(entityObject.Category))
 		}

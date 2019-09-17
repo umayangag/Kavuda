@@ -12,6 +12,7 @@ func EntityFromNews(newsItem models2.NewsItem, category string) models.Entity {
 	return models.Entity{
 		Title:     newsItem.Title,
 		SourceURL: newsItem.Link,
+		UpdatedAt: newsItem.Date,
 	}.SetAttribute("", models.Value{
 		Type:     "html",
 		RawValue: newsItem.Content,
