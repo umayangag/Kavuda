@@ -40,7 +40,7 @@ func FillNewsContent(newsItem NewsItem, contentClass string, htmlCleaner clean_h
 
 	//clean html code by removing unwanted information
 	var imageList []models.Upload
-	newsItem.Content, _, imageList = htmlCleaner.CleanHTML(newsItem.Link, news)
+	newsItem.Content, _, imageList, newsItem.ImageURL = htmlCleaner.CleanHTML(newsItem.Link, news)
 
 	for _, image := range imageList {
 		go func(payload models.Upload) {
