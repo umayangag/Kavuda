@@ -14,6 +14,7 @@ func EntityFromNews(newsItem models2.NewsItem, category string) models.Entity {
 		SourceURL: newsItem.Link,
 		UpdatedAt: newsItem.Date,
 		ImageURL:  newsItem.ImageURL,
+		Snippet:   newsItem.Snippet,
 	}.SetAttribute("", models.Value{
 		Type:     "html",
 		RawValue: newsItem.Content,
@@ -23,9 +24,6 @@ func EntityFromNews(newsItem models2.NewsItem, category string) models.Entity {
 	}).SetAttribute("author", models.Value{
 		Type:     "string",
 		RawValue: newsItem.Author,
-	}).SetAttribute("snippet", models.Value{
-		Type:     "string",
-		RawValue: newsItem.Snippet,
 	}).AddCategory("News").AddCategory(category)
 
 }
