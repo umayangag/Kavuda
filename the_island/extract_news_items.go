@@ -15,8 +15,16 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	if err != nil {
 		return nil, err
 	}
+	resp1, err := request_handlers.GetRequest(newsSiteUrl1)
+	if err != nil {
+		return nil, err
+	}
 	//convert html string to doc for element selection
 	doc, err := utils2.HTMLStringToDoc(resp)
+	if err != nil {
+		return nil, err
+	}
+	doc1, err := utils2.HTMLStringToDoc(resp1)
 	if err != nil {
 		return nil, err
 	}
@@ -24,8 +32,11 @@ func (d TheIslandDecoder) ExtractNewsItems() ([]models.NewsItem, error) {
 	var newsLinks []string
 
 	newsNodes := doc.Find(".col")
+	newsNodes1 := doc1.Find(".col")
+
+	newsNodesNodes := append(newsNodes.Nodes, newsNodes1.Nodes...)
 	var newsItems []models.NewsItem
-	for _, node := range newsNodes.Nodes {
+	for _, node := range newsNodesNodes {
 		nodeDoc := goquery.NewDocumentFromNode(node)
 		dateString, _ := nodeDoc.Find(".article_date").First().Html()
 
